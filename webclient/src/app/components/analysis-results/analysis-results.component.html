@@ -1,0 +1,142 @@
+<section class="analysis-results" *ngIf="result?.explanation as data">
+
+    <!-- Header -->
+    <div class="results-header">
+        <div>
+            <h2>Medical Analysis</h2>
+            <p>
+                Your medical document explained in simpler language.
+            </p>
+        </div>
+
+        <span class="document-count">
+            {{ result?.total_pages }}
+            {{ result?.total_pages === 1 ? 'page' : 'pages' }}
+        </span>
+    </div>
+
+    <!-- Summary -->
+    <section class="result-section summary-section">
+
+        <div class="section-title">
+            <h3>Patient-Friendly Summary</h3>
+        </div>
+
+        <p class="summary-text" *ngIf="data.summary as summary; else emptySummary">
+            {{ summary.text }}
+        </p>
+
+        <ng-template #emptySummary>
+            <p class="empty-message">
+                {{ data.message || 'No medical summary is available.' }}
+            </p>
+        </ng-template>
+
+    </section>
+
+    <!-- Medical Facts -->
+    <section class="result-section">
+
+        <div class="section-title">
+            <h3>Medical Information</h3>
+
+            <span class="fact-count">
+                {{ data.explanations.length }} items
+            </span>
+        </div>
+
+        <p class="empty-message" *ngIf="data.explanations.length === 0">
+            No medical information was extracted.
+        </p>
+
+        <div class="fact-list">
+
+            <article class="fact-card" *ngFor="
+          let fact of data.explanations;
+          trackBy: trackByFactId
+        " [class.fact-card--review]="fact.needs_review">
+
+                <!-- Fact Header -->
+                <div class="fact-header">
+
+                    <h4>{{ fact.label }}</h4>
+
+                    <span class="fact-status" [class.fact-status--review]="fact.needs_review">
+                        {{
+                        fact.needs_review
+                        ? 'Needs review'
+                        : 'From document'
+                        }}
+                    </span>
+
+                </div>
+
+                <!-- Patient-friendly explanation -->
+                <p class="fact-explanation">
+                    {{ fact.explanation }}
+                </p>
+
+                <!-- Medical review note -->
+                <div class="review-notice" *ngIf="fact.needs_review">
+                    This information may be incomplete or require
+                    further verification.
+                </div>
+
+                <!-- OCR Evidence -->
+                <button type="button" class="source-button" (click)="toggleSource(fact)" [attr.aria-expanded]="
+            expandedFactId === fact.fact_id
+          " [attr.aria-controls]="
+            'source-' + fact.fact_id
+          ">
+                    {{
+                    expandedFactId === fact.fact_id
+                    ? 'Hide OCR evidence'
+                    : 'View OCR evidence'
+                    }}
+                </button>
+
+                <div class="source-detail" *ngIf="expandedFactId === fact.fact_id" [id]="'source-' + fact.fact_id">
+
+                    <div class="source-location">
+                        Page {{ fact.source.page_index + 1 }}
+                        · OCR line {{ fact.source.source_line_index + 1 }}
+                    </div>
+
+                    <blockquote>
+                        {{ fact.source.source_quote }}
+                    </blockquote>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+    <!-- Questions for Healthcare Professionals -->
+    <section class="result-section" *ngIf="data.clinician_questions.length > 0">
+
+        <div class="section-title">
+            <h3>Questions for Your Healthcare Professional</h3>
+        </div>
+
+        <p class="section-description">
+            You may use these questions when discussing
+            the document with a healthcare professional.
+        </p>
+
+        <ol class="question-list">
+            <li *ngFor="let question of data.clinician_questions">
+                {{ question.text }}
+            </li>
+        </ol>
+
+    </section>
+
+    <!-- Disclaimer -->
+    <div class="medical-disclaimer">
+        {{ data.disclaimer }}
+    </div>
+
+</section>

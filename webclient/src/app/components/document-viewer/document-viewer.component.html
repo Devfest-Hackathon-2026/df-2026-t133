@@ -1,0 +1,111 @@
+<section class="viewer-card" *ngIf="files.length > 0">
+
+  <!-- Header -->
+  <div class="viewer-header">
+
+    <div>
+      <h2>Original Document</h2>
+      <p>View the source of extracted medical information.</p>
+    </div>
+
+    <span class="page-counter">
+      {{ activePageIndex + 1 }} / {{ files.length }}
+    </span>
+
+  </div>
+
+  <!-- Page Navigation -->
+  <div class="viewer-toolbar">
+
+    <button
+      type="button"
+      (click)="previousPage()"
+      [disabled]="activePageIndex === 0"
+      aria-label="Previous page"
+    >
+      &#8592;
+    </button>
+
+    <span>Page {{ activePageIndex + 1 }}</span>
+
+    <button
+      type="button"
+      (click)="nextPage()"
+      [disabled]="activePageIndex === files.length - 1"
+      aria-label="Next page"
+    >
+      &#8594;
+    </button>
+
+  </div>
+
+  <!-- Document Image -->
+  <div class="document-stage" *ngIf="activePreview as preview">
+
+    <div
+      class="document-canvas"
+      *ngIf="preview.url; else previewUnavailable"
+    >
+
+      <img
+        [src]="preview.url"
+        [alt]="preview.name"
+      />
+
+      <div
+        *ngIf="highlightStyle"
+        class="highlight-box"
+        [ngStyle]="highlightStyle"
+        aria-hidden="true"
+      ></div>
+
+    </div>
+
+    <ng-template #previewUnavailable>
+      <p class="viewer-message">
+        {{
+          preview.error
+            ? 'Unable to load document preview.'
+            : 'Loading document preview...'
+        }}
+      </p>
+    </ng-template>
+
+  </div>
+
+  <!-- Evidence Details -->
+  <div
+    class="evidence-details"
+    *ngIf="
+      selectedSource &&
+      selectedSource.page_index === activePageIndex
+    "
+  >
+
+    <div class="evidence-title">
+      <span class="evidence-marker"></span>
+      Selected OCR Evidence
+    </div>
+
+    <p class="source-location">
+      Page {{ selectedSource.page_index + 1 }}
+      · Line {{ selectedSource.source_line_index + 1 }}
+    </p>
+
+    <blockquote>
+      {{ selectedSource.source_quote }}
+    </blockquote>
+
+    <p class="viewer-message" *ngIf="!highlightStyle">
+      The source text is available, but its OCR
+      bounding box could not be located.
+    </p>
+
+  </div>
+
+  <p class="viewer-hint" *ngIf="!selectedSource">
+    Select "View OCR evidence" from a medical fact
+    to highlight its location in the document.
+  </p>
+
+</section>

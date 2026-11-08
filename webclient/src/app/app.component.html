@@ -1,0 +1,143 @@
+<div class="app-shell">
+
+  <!-- Top Navigation -->
+  <header class="topbar">
+    <div class="topbar-inner">
+
+      <div class="brand">
+        <img src="assets/logo.png" alt="ClinPlain" class="brand-logo" />
+      </div>
+
+      <div class="topbar-label">
+        AI-assisted medical document understanding
+      </div>
+
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+
+      <div class="welcome-content">
+        <span class="eyebrow">
+          SMARTER DOCUMENT UNDERSTANDING
+        </span>
+
+        <h1>
+          Understand your health records
+          <span>with clarity.</span>
+        </h1>
+
+        <p class="welcome-description">
+          Upload medical documents, explore
+          easy-to-understand explanations,
+          and learn what to ask your healthcare professional.
+        </p>
+
+        <div class="feature-points">
+          <span>Medical document analysis</span>
+          <span>Source-linked explanations</span>
+          <span>Interactive Teach-Back</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Document Upload -->
+    <section class="upload-section">
+
+      <app-document-upload (analysisCompleted)="onAnalysisCompleted($event)"></app-document-upload>
+
+    </section>
+
+    <!-- Analysis Results -->
+    <section class="results-section" *ngIf="analysisResult as result">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="eyebrow">
+            YOUR ANALYSIS
+          </span>
+
+          <h2>
+            Explore your document
+          </h2>
+
+          <p>
+            Select a medical fact to view its
+            original evidence.
+          </p>
+        </div>
+
+        <span class="results-tag">
+          {{ result.total_pages }}
+          {{ result.total_pages === 1 ? 'page' : 'pages' }}
+          analyzed
+        </span>
+
+      </div>
+
+      <!-- Viewer + Explanations -->
+      <div id="analysis-workspace" class="analysis-workspace">
+
+        <app-document-viewer [files]="uploadedFiles" [ocrPages]="result.ocr.pages"
+          [selectedSource]="selectedSource"></app-document-viewer>
+
+        <app-analysis-results [result]="result" (sourceSelected)="onSourceSelected($event)"></app-analysis-results>
+
+      </div>
+
+    </section>
+
+    <!-- Teach-Back -->
+    <section class="teachback-section" *ngIf="analysisResult as result">
+
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">
+            UNDERSTAND & LEARN
+          </span>
+
+          <h2>
+            Check your understanding
+          </h2>
+
+          <p>
+            Reflect on what you learned
+            from your medical document.
+          </p>
+        </div>
+      </div>
+
+      <app-teachback [explanation]="result.explanation"
+        (sourceSelected)="onTeachBackSourceSelected($event)"></app-teachback>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+
+    <div class="footer-inner">
+
+      <span class="footer-brand">
+        ClinPlain
+      </span>
+
+      <span>
+        AI-assisted medical document understanding.
+      </span>
+
+      <span>
+        © 2026 ClinPlain
+      </span>
+
+    </div>
+
+  </footer>
+
+</div>

@@ -1,0 +1,334 @@
+:host {
+  display: block;
+  min-width: 0;
+  margin: 0;
+}
+
+.analysis-results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.results-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  h2 {
+    margin: 0 0 7px;
+    color: var(--cp-text);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: var(--cp-text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+.document-count {
+  flex-shrink: 0;
+  padding: 7px 12px;
+
+  background: var(--cp-primary-light);
+  color: var(--cp-primary);
+
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.result-section {
+  min-width: 0;
+  padding: 24px;
+
+  background: #fff;
+  border: 1px solid var(--cp-border);
+  border-radius: 16px;
+  box-shadow: var(--cp-shadow);
+}
+
+.summary-section {
+  background: linear-gradient(
+    120deg,
+    #eff8f3,
+    #f3f7ff
+  );
+
+  border-color: #cfe5d9;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+
+  h3 {
+    margin: 0;
+    color: var(--cp-text);
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.summary-text {
+  margin: 0;
+  color: #334155;
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.fact-count {
+  color: var(--cp-text-muted);
+  font-size: 13px;
+}
+
+.fact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fact-card {
+  min-width: 0;
+  padding: 19px;
+
+  background: #fff;
+  border: 1px solid var(--cp-border);
+  border-radius: 12px;
+
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    border-color: #9dcbb5;
+    box-shadow: var(--cp-shadow-hover);
+  }
+
+  &--review {
+    background: var(--cp-warning-light);
+    border-color: #edcc88;
+  }
+}
+
+.fact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+
+  h4 {
+    margin: 0;
+    color: var(--cp-text);
+    font-size: 16px;
+    font-weight: 650;
+  }
+}
+
+.fact-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+
+  background: #f0f5f2;
+  color: #456256;
+
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &--review {
+    background: #fff0c6;
+    color: #805100;
+  }
+}
+
+.fact-explanation {
+  margin: 0 0 15px;
+
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.85;
+  white-space: pre-line;
+}
+
+.review-notice {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+
+  background: #fff7e2;
+  border-left: 3px solid var(--cp-warning);
+  border-radius: 5px;
+
+  color: #805100;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.source-button {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 0;
+
+  background: transparent;
+  border: none;
+
+  color: var(--cp-blue);
+  font-size: 13px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  &:hover {
+    color: var(--cp-blue-hover);
+    text-decoration: underline;
+  }
+}
+
+.source-detail {
+  margin-top: 12px;
+  padding: 15px;
+
+  background: var(--cp-blue-light);
+  border: 1px solid #d9e8ff;
+  border-radius: 10px;
+
+  .source-location {
+    margin-bottom: 9px;
+    color: #64748b;
+    font-size: 12px;
+  }
+
+  blockquote {
+    margin: 0;
+    padding-left: 12px;
+
+    color: #334155;
+    border-left: 3px solid var(--cp-blue);
+
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+}
+
+.section-description {
+  margin: 0 0 14px;
+  color: var(--cp-text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.question-list {
+  margin: 0;
+  padding-left: 22px;
+
+  li {
+    padding: 7px 0;
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+}
+
+.medical-disclaimer {
+  padding: 15px 18px;
+
+  background: #f4f7f5;
+  border: 1px solid var(--cp-border);
+  border-radius: 10px;
+
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.empty-message {
+  color: var(--cp-text-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .results-header {
+    flex-direction: column;
+  }
+
+  .result-section {
+    padding: 18px;
+  }
+
+  .fact-card {
+    padding: 15px;
+  }
+}
+
+/* Bright Medical Analysis Theme */
+
+.summary-section {
+  background: linear-gradient(
+    120deg,
+    #edf5ff 0%,
+    #f8fbff 100%
+  );
+
+  border-color: #d4e5ff;
+}
+
+.fact-card {
+  background: #ffffff;
+  border-color: #e3eaf4;
+
+  &:hover {
+    border-color: #a7c7fa;
+    box-shadow: var(--cp-shadow-hover);
+  }
+
+  &--review {
+    background: #fffaf0;
+    border-color: #f3d492;
+  }
+}
+
+.fact-status {
+  background: #edf4ff;
+  color: #235aa5;
+
+  &--review {
+    background: #fff1c9;
+    color: #875500;
+  }
+}
+
+.source-button {
+  color: #1a73e8;
+
+  &:hover {
+    color: #155fc5;
+  }
+}
+
+.source-detail {
+  background: #f1f7ff;
+  border-color: #d8e7ff;
+}
+
+.review-notice {
+  background: #fff8e6;
+  border-left-color: #e7a400;
+}
+
+.medical-disclaimer {
+  background: #f8faff;
+}

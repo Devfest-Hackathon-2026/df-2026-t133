@@ -1,0 +1,82 @@
+<section class="upload-card">
+
+    <div class="upload-header">
+        <h2>Upload Medical Documents</h2>
+
+        <p>
+            Upload images of medical records, clinical notes,
+            or laboratory reports.
+        </p>
+    </div>
+
+    <!-- File Upload -->
+    <div class="upload-area">
+
+        <label for="documentFiles" class="upload-label">
+            <span class="upload-icon">+</span>
+
+            <strong>Choose medical documents</strong>
+
+            <small>
+                PNG / JPG — Up to 12 images
+            </small>
+        </label>
+
+        <input id="documentFiles" type="file" accept="image/png,image/jpeg" multiple [disabled]="isLoading"
+            (change)="onFilesSelected($event)" />
+
+    </div>
+
+    <!-- Image Previews -->
+    <div class="preview-grid" *ngIf="previews.length > 0">
+
+        <div class="preview-item" *ngFor="let preview of previews">
+
+            <img *ngIf="preview.url" [src]="preview.url" [alt]="preview.name" />
+
+            <span class="filename">
+                {{ preview.name }}
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="upload-actions">
+
+        <div class="language-field">
+
+            <label for="language">
+                Explanation language
+            </label>
+
+            <select id="language" [value]="language" [disabled]="isLoading" (change)="onLanguageChange($event)">
+                <option value="vi">Vietnamese</option>
+                <option value="en">English</option>
+                <option value="ja">Japanese</option>
+            </select>
+
+        </div>
+
+        <button type="button" (click)="analyze()" [disabled]="!selectedFiles.length || isLoading">
+            {{ isLoading ? 'Analyzing...' : 'Analyze Documents' }}
+        </button>
+
+        <button type="button" (click)="clearFiles()" [disabled]="!selectedFiles.length || isLoading">
+            Clear
+        </button>
+
+    </div>
+
+    <!-- Loading -->
+    <p class="loading" *ngIf="isLoading">
+        Reading and explaining your documents...
+    </p>
+
+    <!-- Error -->
+    <p class="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+    </p>
+
+</section>

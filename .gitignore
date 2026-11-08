@@ -32,3 +32,8 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 *.log
+
+
+data
+scripts
+note.txt
