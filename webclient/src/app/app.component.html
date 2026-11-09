@@ -1,4 +1,4 @@
-<div class="app-shell">
+<div class="app-shell" [attr.lang]="languageService.currentLanguage">
 
   <!-- Top Navigation -->
   <header class="topbar">
@@ -8,8 +8,22 @@
         <img src="assets/logo.png" alt="ClinPlain" class="brand-logo" />
       </div>
 
-      <div class="topbar-label">
-        AI-assisted medical document understanding
+      <div class="topbar-actions">
+        <div class="topbar-label">
+          {{ languageService.translate('app.subtitle') }}
+        </div>
+
+        <div class="ui-language-switch" role="group"
+          [attr.aria-label]="languageService.translate('language.interface')">
+          <button type="button" class="language-button"
+            [class.is-active]="languageService.currentLanguage === 'en'"
+            [attr.aria-pressed]="languageService.currentLanguage === 'en'"
+            (click)="setUiLanguage('en')">EN</button>
+          <button type="button" class="language-button"
+            [class.is-active]="languageService.currentLanguage === 'ja'"
+            [attr.aria-pressed]="languageService.currentLanguage === 'ja'"
+            (click)="setUiLanguage('ja')">日本語</button>
+        </div>
       </div>
 
     </div>
@@ -22,24 +36,22 @@
 
       <div class="welcome-content">
         <span class="eyebrow">
-          SMARTER DOCUMENT UNDERSTANDING
+          {{ languageService.translate('welcome.eyebrow') }}
         </span>
 
         <h1>
-          Understand your health records
-          <span>with clarity.</span>
+          {{ languageService.translate('welcome.heading') }}
+          <span>{{ languageService.translate('welcome.headingAccent') }}</span>
         </h1>
 
         <p class="welcome-description">
-          Upload medical documents, explore
-          easy-to-understand explanations,
-          and learn what to ask your healthcare professional.
+          {{ languageService.translate('welcome.description') }}
         </p>
 
         <div class="feature-points">
-          <span>Medical document analysis</span>
-          <span>Source-linked explanations</span>
-          <span>Interactive Teach-Back</span>
+          <span>{{ languageService.translate('welcome.featureAnalysis') }}</span>
+          <span>{{ languageService.translate('welcome.featureEvidence') }}</span>
+          <span>{{ languageService.translate('welcome.featureTeachback') }}</span>
         </div>
       </div>
 
@@ -58,25 +70,14 @@
       <div class="section-heading">
 
         <div>
-          <span class="eyebrow">
-            YOUR ANALYSIS
-          </span>
+          <span class="eyebrow">{{ languageService.translate('workspace.eyebrow') }}</span>
 
-          <h2>
-            Explore your document
-          </h2>
+          <h2>{{ languageService.translate('workspace.title') }}</h2>
 
-          <p>
-            Select a medical fact to view its
-            original evidence.
-          </p>
+          <p>{{ languageService.translate('workspace.description') }}</p>
         </div>
 
-        <span class="results-tag">
-          {{ result.total_pages }}
-          {{ result.total_pages === 1 ? 'page' : 'pages' }}
-          analyzed
-        </span>
+        <span class="results-tag">{{ result.total_pages }}{{ languageService.translate(result.total_pages === 1 ? 'workspace.pageAnalyzedSingular' : 'workspace.pageAnalyzedPlural') }}</span>
 
       </div>
 
@@ -97,18 +98,11 @@
 
       <div class="section-heading">
         <div>
-          <span class="eyebrow">
-            UNDERSTAND & LEARN
-          </span>
+          <span class="eyebrow">{{ languageService.translate('teachback.sectionEyebrow') }}</span>
 
-          <h2>
-            Check your understanding
-          </h2>
+          <h2>{{ languageService.translate('teachback.sectionTitle') }}</h2>
 
-          <p>
-            Reflect on what you learned
-            from your medical document.
-          </p>
+          <p>{{ languageService.translate('teachback.sectionDescription') }}</p>
         </div>
       </div>
 
@@ -129,7 +123,7 @@
       </span>
 
       <span>
-        AI-assisted medical document understanding.
+        {{ languageService.translate('footer.description') }}
       </span>
 
       <span>

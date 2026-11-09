@@ -3,12 +3,12 @@
   <!-- Header -->
   <div class="teachback-header">
     <div>
-      <h2>Teach-Back</h2>
-      <p>Check your understanding of the medical document.</p>
+      <h2>{{ i18n.translate('teachback.title') }}</h2>
+      <p>{{ i18n.translate('teachback.description') }}</p>
     </div>
 
     <span class="teachback-badge">
-      Interactive Learning
+      {{ i18n.translate('teachback.badge') }}
     </span>
   </div>
 
@@ -17,17 +17,14 @@
     class="teachback-intro"
     *ngIf="questions.length === 0 && !isGenerating"
   >
-    <h3>What did you understand?</h3>
+    <h3>{{ i18n.translate('teachback.introTitle') }}</h3>
 
     <p>
-      Answer a few short questions in your own words.
-      ClinPlain will help clarify anything that may
-      be missing or misunderstood.
+      {{ i18n.translate('teachback.introDescription') }}
     </p>
 
     <p class="intro-note">
-      This is not a medical examination or a test of
-      your medical knowledge.
+      {{ i18n.translate('teachback.introNote') }}
     </p>
 
     <button
@@ -36,7 +33,7 @@
       (click)="start()"
       [disabled]="!explanation.explanations.length"
     >
-      Start Teach-Back
+      {{ i18n.translate('teachback.start') }}
     </button>
   </div>
 
@@ -46,7 +43,7 @@
     *ngIf="isGenerating"
     aria-live="polite"
   >
-    Generating questions from your document...
+    {{ i18n.translate('teachback.generating') }}
   </div>
 
   <!-- Question State -->
@@ -58,8 +55,7 @@
 
       <div class="question-progress">
         <span>
-          Question {{ currentQuestionIndex + 1 }}
-          of {{ questions.length }}
+          {{ i18n.translate('teachback.questionPrefix') }}{{ currentQuestionIndex + 1 }}{{ i18n.translate('teachback.questionMiddle') }}{{ questions.length }}{{ i18n.translate('teachback.questionSuffix') }}
         </span>
 
         <div class="progress-track">
@@ -78,14 +74,14 @@
 
       <div class="answer-field">
         <label for="teachback-answer">
-          Your answer
+          {{ i18n.translate('teachback.yourAnswer') }}
         </label>
 
         <textarea
           id="teachback-answer"
           rows="4"
           maxlength="2000"
-          placeholder="Explain what you understood..."
+          [placeholder]="i18n.translate('teachback.answerPlaceholder')"
           [value]="answer"
           [disabled]="isEvaluating || !!evaluation"
           (input)="onAnswerInput($event)"
@@ -102,8 +98,8 @@
       >
         {{
           isEvaluating
-            ? 'Checking your answer...'
-            : 'Check Understanding'
+            ? i18n.translate('teachback.checking')
+            : i18n.translate('teachback.check')
         }}
       </button>
 
@@ -129,7 +125,7 @@
           class="clarification"
           *ngIf="feedback.clarification"
         >
-          <strong>Clarification</strong>
+          <strong>{{ i18n.translate('teachback.clarification') }}</strong>
 
           <p>{{ feedback.clarification }}</p>
         </div>
@@ -139,7 +135,7 @@
           class="feedback-evidence"
           *ngIf="feedback.evidence.length > 0"
         >
-          <h4>Supporting Evidence</h4>
+          <h4>{{ i18n.translate('teachback.supportingEvidence') }}</h4>
 
           <div
             class="evidence-item"
@@ -154,7 +150,7 @@
               class="evidence-button"
               (click)="viewEvidence(evidence)"
             >
-              Highlight in original document
+              {{ i18n.translate('teachback.highlightOriginal') }}
             </button>
           </div>
         </div>
@@ -170,8 +166,8 @@
       >
         {{
           currentQuestionIndex + 1 === questions.length
-            ? 'Finish Teach-Back'
-            : 'Next Question'
+            ? i18n.translate('teachback.finish')
+            : i18n.translate('teachback.next')
         }}
       </button>
 
@@ -185,12 +181,10 @@
   >
     <div class="complete-icon">✓</div>
 
-    <h3>Teach-Back Completed</h3>
+    <h3>{{ i18n.translate('teachback.completedTitle') }}</h3>
 
     <p>
-      You have completed the questions.
-      You can review the medical explanations above
-      whenever you need clarification.
+      {{ i18n.translate('teachback.completedDescription') }}
     </p>
 
     <button
@@ -198,7 +192,7 @@
       class="primary-button"
       (click)="start()"
     >
-      Try Again
+      {{ i18n.translate('teachback.tryAgain') }}
     </button>
   </div>
 
@@ -208,7 +202,7 @@
     *ngIf="errorMessage"
     role="alert"
   >
-    {{ errorMessage }}
+    {{ i18n.translate(errorMessage) }}<ng-container *ngIf="errorHttpStatus !== null"> (HTTP {{ errorHttpStatus }})</ng-container>
   </p>
 
 </section>

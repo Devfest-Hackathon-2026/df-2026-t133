@@ -4,8 +4,8 @@
   <div class="viewer-header">
 
     <div>
-      <h2>Original Document</h2>
-      <p>View the source of extracted medical information.</p>
+      <h2>{{ i18n.translate('viewer.title') }}</h2>
+      <p>{{ i18n.translate('viewer.description') }}</p>
     </div>
 
     <span class="page-counter">
@@ -21,18 +21,18 @@
       type="button"
       (click)="previousPage()"
       [disabled]="activePageIndex === 0"
-      aria-label="Previous page"
+      [attr.aria-label]="i18n.translate('viewer.previousPage')"
     >
       &#8592;
     </button>
 
-    <span>Page {{ activePageIndex + 1 }}</span>
+    <span>{{ i18n.translate('viewer.pagePrefix') }}{{ activePageIndex + 1 }}{{ i18n.translate('viewer.pageSuffix') }}</span>
 
     <button
       type="button"
       (click)="nextPage()"
       [disabled]="activePageIndex === files.length - 1"
-      aria-label="Next page"
+      [attr.aria-label]="i18n.translate('viewer.nextPage')"
     >
       &#8594;
     </button>
@@ -65,8 +65,8 @@
       <p class="viewer-message">
         {{
           preview.error
-            ? 'Unable to load document preview.'
-            : 'Loading document preview...'
+            ? i18n.translate('viewer.previewError')
+            : i18n.translate('viewer.previewLoading')
         }}
       </p>
     </ng-template>
@@ -84,12 +84,12 @@
 
     <div class="evidence-title">
       <span class="evidence-marker"></span>
-      Selected OCR Evidence
+      {{ i18n.translate('viewer.selectedEvidence') }}
     </div>
 
     <p class="source-location">
-      Page {{ selectedSource.page_index + 1 }}
-      · Line {{ selectedSource.source_line_index + 1 }}
+      {{ i18n.translate('viewer.pagePrefix') }}{{ selectedSource.page_index + 1 }}{{ i18n.translate('viewer.pageSuffix') }}
+      · {{ i18n.translate('viewer.linePrefix') }}{{ selectedSource.source_line_index + 1 }}{{ i18n.translate('viewer.lineSuffix') }}
     </p>
 
     <blockquote>
@@ -97,15 +97,13 @@
     </blockquote>
 
     <p class="viewer-message" *ngIf="!highlightStyle">
-      The source text is available, but its OCR
-      bounding box could not be located.
+      {{ i18n.translate('viewer.highlightUnavailable') }}
     </p>
 
   </div>
 
   <p class="viewer-hint" *ngIf="!selectedSource">
-    Select "View OCR evidence" from a medical fact
-    to highlight its location in the document.
+    {{ i18n.translate('viewer.hint') }}
   </p>
 
 </section>

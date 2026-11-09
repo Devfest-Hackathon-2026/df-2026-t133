@@ -12,6 +12,7 @@ import {
   MedicalExplanation,
   OCRSource
 } from '../../app.service';
+import { LanguageService } from '../../services/language.service';
 
 
 @Component({
@@ -20,6 +21,8 @@ import {
   styleUrls: ['./analysis-results.component.scss']
 })
 export class AnalysisResultsComponent implements OnChanges {
+
+  constructor(public readonly i18n: LanguageService) { }
 
   @Input() result: AnalysisResult | null = null;
 

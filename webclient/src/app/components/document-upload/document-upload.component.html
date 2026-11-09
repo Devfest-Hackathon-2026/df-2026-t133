@@ -1,11 +1,10 @@
 <section class="upload-card">
 
     <div class="upload-header">
-        <h2>Upload Medical Documents</h2>
+        <h2>{{ i18n.translate('upload.title') }}</h2>
 
         <p>
-            Upload images of medical records, clinical notes,
-            or laboratory reports.
+            {{ i18n.translate('upload.description') }}
         </p>
     </div>
 
@@ -15,14 +14,15 @@
         <label for="documentFiles" class="upload-label">
             <span class="upload-icon">+</span>
 
-            <strong>Choose medical documents</strong>
+            <strong>{{ i18n.translate('upload.select') }}</strong>
 
             <small>
-                PNG / JPG — Up to 12 images
+                {{ i18n.translate('upload.fileHint') }}
             </small>
         </label>
 
         <input id="documentFiles" type="file" accept="image/png,image/jpeg" multiple [disabled]="isLoading"
+            [attr.aria-label]="i18n.translate('upload.select')"
             (change)="onFilesSelected($event)" />
 
     </div>
@@ -48,30 +48,30 @@
         <div class="language-field">
 
             <label for="language">
-                Explanation language
+                {{ i18n.translate('language.explanation') }}
             </label>
 
             <select id="language" [value]="language" [disabled]="isLoading" (change)="onLanguageChange($event)">
-                <option value="vi">Vietnamese</option>
-                <option value="en">English</option>
-                <option value="ja">Japanese</option>
+                <option value="en">{{ i18n.translate('language.english') }}</option>
+                <option value="ja">{{ i18n.translate('language.japanese') }}</option>
+                <option value="vi">{{ i18n.translate('language.vietnamese') }}</option>
             </select>
 
         </div>
 
         <button type="button" (click)="analyze()" [disabled]="!selectedFiles.length || isLoading">
-            {{ isLoading ? 'Analyzing...' : 'Analyze Documents' }}
+            {{ i18n.translate(isLoading ? 'upload.analyzing' : 'upload.analyze') }}
         </button>
 
         <button type="button" (click)="clearFiles()" [disabled]="!selectedFiles.length || isLoading">
-            Clear
+            {{ i18n.translate('upload.clear') }}
         </button>
 
     </div>
 
     <!-- Loading -->
     <p class="loading" *ngIf="isLoading">
-        Reading and explaining your documents...
+        {{ i18n.translate('upload.loading') }}
     </p>
 
     <!-- Error -->

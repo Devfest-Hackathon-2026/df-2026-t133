@@ -1,0 +1,30 @@
+# Frontend is deployed separately.
+webclient/
+
+# Git and editor files.
+.git/
+.github/
+.vscode/
+.idea/
+
+# Local Python environments.
+.venv/
+venv/
+env/
+
+# Python cache.
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Local secrets.
+.env
+.env.*
+*service-account*.json
+*credentials*.json
+
+# Local temporary files.
+*.log
+*.tmp
+.DS_Store

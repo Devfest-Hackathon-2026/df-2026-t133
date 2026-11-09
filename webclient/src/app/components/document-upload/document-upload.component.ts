@@ -7,6 +7,7 @@ import {
 import { finalize } from 'rxjs/operators';
 
 import { AppService, Language } from '../../app.service';
+import { LanguageService } from '../../services/language.service';
 
 
 interface ImagePreview {
@@ -31,10 +32,34 @@ export class DocumentUploadComponent {
   selectedFiles: File[] = [];
   previews: ImagePreview[] = [];
 
-  language: Language = 'vi';
+  language: Language = 'en';
 
   isLoading = false;
-  errorMessage = '';
+
+  // Store translation keys so errors update when the UI language changes.
+  private errorKey = '';
+  private errorDetail = '';
+
+  get errorMessage(): string {
+    if (!this.errorKey) {
+      return '';
+    }
+
+    return this.i18n.translate(this.errorKey).replace(
+      '{detail}',
+      this.errorDetail
+    );
+  }
+
+  private setError(key: string, detail = ''): void {
+    this.errorKey = key;
+    this.errorDetail = detail;
+  }
+
+  private clearError(): void {
+    this.errorKey = '';
+    this.errorDetail = '';
+  }
 
   private readonly maxFiles = 12;
   private readonly maxFileSize = 5 * 1024 * 1024;
@@ -46,7 +71,8 @@ export class DocumentUploadComponent {
   ];
 
   constructor(
-    private appService: AppService
+    private appService: AppService,
+    public readonly i18n: LanguageService
   ) { }
 
   /**
@@ -71,13 +97,11 @@ export class DocumentUploadComponent {
       return;
     }
 
-    this.errorMessage = '';
+    this.clearError();
 
     // Validate number of images.
     if (files.length > this.maxFiles) {
-      this.errorMessage = (
-        'Maximum 12 images allowed.'
-      );
+      this.setError('upload.error.maxFiles');
       return;
     }
 
@@ -87,9 +111,7 @@ export class DocumentUploadComponent {
     );
 
     if (invalidFile) {
-      this.errorMessage = (
-        'Only JPEG and PNG images are supported.'
-      );
+      this.setError('upload.error.invalidType');
       return;
     }
 
@@ -99,9 +121,7 @@ export class DocumentUploadComponent {
     );
 
     if (oversizedFile) {
-      this.errorMessage = (
-        'Each image must be 5 MB or smaller.'
-      );
+      this.setError('upload.error.fileSize');
       return;
     }
 
@@ -112,9 +132,7 @@ export class DocumentUploadComponent {
     );
 
     if (totalSize > this.maxTotalSize) {
-      this.errorMessage = (
-        'Total upload size exceeds 25 MB.'
-      );
+      this.setError('upload.error.totalSize');
       return;
     }
 
@@ -150,9 +168,7 @@ export class DocumentUploadComponent {
 
       reader.onerror = () => {
         if (this.selectedFiles[index] === file) {
-          this.errorMessage = (
-            `Unable to preview ${file.name}.`
-          );
+          this.setError('upload.error.preview', file.name);
         }
       };
 
@@ -184,7 +200,7 @@ export class DocumentUploadComponent {
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
+    this.clearError();
 
     this.appService
       .analyzeDocuments<unknown>(
@@ -216,23 +232,19 @@ export class DocumentUploadComponent {
 
           if (stage) {
 
-            this.errorMessage = (
-              `Analysis failed at stage: ${stage}`
-            );
+            this.setError('upload.error.stage', String(stage));
+
+          } else if (error.status === 429) {
+
+            this.setError('upload.error.rateLimit');
 
           } else if (error.status === 0) {
 
-            this.errorMessage = (
-              'Cannot connect to the backend API. ' +
-              'Please check FastAPI and CORS settings.'
-            );
+            this.setError('upload.error.connection');
 
           } else {
 
-            this.errorMessage = (
-              'Unable to analyze documents. ' +
-              'Please try again.'
-            );
+            this.setError('upload.error.generic');
           }
 
           console.error(
@@ -255,6 +267,6 @@ export class DocumentUploadComponent {
 
     this.selectedFiles = [];
     this.previews = [];
-    this.errorMessage = '';
+    this.clearError();
   }
 }

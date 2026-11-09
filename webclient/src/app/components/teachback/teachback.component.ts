@@ -18,6 +18,7 @@ import {
   OCRSource,
   PatientExplanationResult
 } from '../../app.service';
+import { LanguageService } from '../../services/language.service';
 
 
 type Assessment =
@@ -82,13 +83,16 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
   isEvaluating = false;
   isComplete = false;
 
+  // Store an i18n key so switching EN/JA also updates visible errors.
   errorMessage = '';
+  errorHttpStatus: number | null = null;
 
   private generateSubscription?: Subscription;
   private evaluateSubscription?: Subscription;
 
   constructor(
-    private appService: AppService
+    private appService: AppService,
+    public readonly i18n: LanguageService
   ) {}
 
   /**
@@ -138,7 +142,7 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
     const facts = this.prepareFacts();
 
     if (!facts.length) {
-      this.errorMessage = 'No medical information is available.';
+      this.errorMessage = 'teachback.error.noMedicalInfo';
       return;
     }
 
@@ -167,7 +171,7 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
             !Array.isArray(response.questions) ||
             response.questions.length === 0
           ) {
-            this.errorMessage = 'No questions were generated.';
+            this.errorMessage = 'teachback.error.noQuestions';
             return;
           }
 
@@ -206,6 +210,7 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
 
     this.isEvaluating = true;
     this.errorMessage = '';
+    this.errorHttpStatus = null;
 
     const payload = {
       language: this.explanation.language,
@@ -231,7 +236,7 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
             response.status !== 'success' ||
             response.question_id !== question.question_id
           ) {
-            this.errorMessage = 'Invalid evaluation response.';
+            this.errorMessage = 'teachback.error.invalidEvaluation';
             return;
           }
 
@@ -260,6 +265,7 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
     this.answer = '';
     this.evaluation = null;
     this.errorMessage = '';
+    this.errorHttpStatus = null;
   }
 
   /**
@@ -277,14 +283,14 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
    * Convert assessment codes into readable labels.
    */
   getAssessmentLabel(assessment: Assessment): string {
-    const labels: Record<Assessment, string> = {
-      understood: 'Understood',
-      partially_understood: 'Partially understood',
-      needs_clarification: 'Needs clarification',
-      not_assessable: 'Not assessable'
+    const keys: Record<Assessment, string> = {
+      understood: 'teachback.assessment.understood',
+      partially_understood: 'teachback.assessment.partiallyUnderstood',
+      needs_clarification: 'teachback.assessment.needsClarification',
+      not_assessable: 'teachback.assessment.notAssessable'
     };
 
-    return labels[assessment];
+    return this.i18n.translate(keys[assessment]);
   }
 
   /**
@@ -299,6 +305,7 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
     this.isEvaluating = false;
     this.isComplete = false;
     this.errorMessage = '';
+    this.errorHttpStatus = null;
   }
 
   private cancelRequests(): void {
@@ -307,19 +314,26 @@ export class TeachbackComponent implements OnChanges, OnDestroy {
   }
 
   private getErrorMessage(error: unknown): string {
+    this.errorHttpStatus = null;
+
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {
-        return 'Cannot connect to the backend API.';
+        return 'teachback.error.connection';
       }
 
-      if (error.status === 502) {
-        return 'AI processing failed. Please try again.';
+      if (error.status === 429) {
+        return 'teachback.error.rateLimited';
       }
 
-      return `Request failed (HTTP ${error.status}).`;
+      if (error.status === 502 || error.status === 504) {
+        return 'teachback.error.aiProcessing';
+      }
+
+      this.errorHttpStatus = error.status;
+      return 'teachback.error.http';
     }
 
-    return 'An unexpected error occurred.';
+    return 'teachback.error.unexpected';
   }
 
   ngOnDestroy(): void {

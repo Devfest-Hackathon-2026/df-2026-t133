@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LanguageService, UiLanguage } from './services/language.service';
 
 import {
   AnalysisResult,
@@ -12,6 +13,12 @@ import {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  constructor(public readonly languageService: LanguageService) {}
+
+  setUiLanguage(language: UiLanguage): void {
+    this.languageService.setLanguage(language);
+  }
 
   analysisResult: AnalysisResult | null = null;
 

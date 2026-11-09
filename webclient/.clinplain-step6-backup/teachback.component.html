@@ -1,0 +1,214 @@
+<section class="teachback-card" *ngIf="explanation">
+
+  <!-- Header -->
+  <div class="teachback-header">
+    <div>
+      <h2>Teach-Back</h2>
+      <p>Check your understanding of the medical document.</p>
+    </div>
+
+    <span class="teachback-badge">
+      Interactive Learning
+    </span>
+  </div>
+
+  <!-- Initial State -->
+  <div
+    class="teachback-intro"
+    *ngIf="questions.length === 0 && !isGenerating"
+  >
+    <h3>What did you understand?</h3>
+
+    <p>
+      Answer a few short questions in your own words.
+      ClinPlain will help clarify anything that may
+      be missing or misunderstood.
+    </p>
+
+    <p class="intro-note">
+      This is not a medical examination or a test of
+      your medical knowledge.
+    </p>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="start()"
+      [disabled]="!explanation.explanations.length"
+    >
+      Start Teach-Back
+    </button>
+  </div>
+
+  <!-- Loading Questions -->
+  <div
+    class="loading-state"
+    *ngIf="isGenerating"
+    aria-live="polite"
+  >
+    Generating questions from your document...
+  </div>
+
+  <!-- Question State -->
+  <div
+    class="question-section"
+    *ngIf="questions.length > 0 && !isComplete"
+  >
+    <ng-container *ngIf="currentQuestion as question">
+
+      <div class="question-progress">
+        <span>
+          Question {{ currentQuestionIndex + 1 }}
+          of {{ questions.length }}
+        </span>
+
+        <div class="progress-track">
+          <div
+            class="progress-fill"
+            [style.width.%]="
+              ((currentQuestionIndex + 1) / questions.length) * 100
+            "
+          ></div>
+        </div>
+      </div>
+
+      <h3 class="question-text">
+        {{ question.question }}
+      </h3>
+
+      <div class="answer-field">
+        <label for="teachback-answer">
+          Your answer
+        </label>
+
+        <textarea
+          id="teachback-answer"
+          rows="4"
+          maxlength="2000"
+          placeholder="Explain what you understood..."
+          [value]="answer"
+          [disabled]="isEvaluating || !!evaluation"
+          (input)="onAnswerInput($event)"
+        ></textarea>
+      </div>
+
+      <!-- Evaluate Button -->
+      <button
+        *ngIf="!evaluation"
+        type="button"
+        class="primary-button"
+        (click)="evaluate()"
+        [disabled]="!answer.trim() || isEvaluating"
+      >
+        {{
+          isEvaluating
+            ? 'Checking your answer...'
+            : 'Check Understanding'
+        }}
+      </button>
+
+      <!-- Evaluation Feedback -->
+      <div
+        class="feedback-card"
+        *ngIf="evaluation as feedback"
+        [ngClass]="feedback.assessment"
+        aria-live="polite"
+      >
+
+        <div class="feedback-header">
+          <strong>
+            {{ getAssessmentLabel(feedback.assessment) }}
+          </strong>
+        </div>
+
+        <p class="feedback-text">
+          {{ feedback.feedback }}
+        </p>
+
+        <div
+          class="clarification"
+          *ngIf="feedback.clarification"
+        >
+          <strong>Clarification</strong>
+
+          <p>{{ feedback.clarification }}</p>
+        </div>
+
+        <!-- Evidence shown only after evaluation -->
+        <div
+          class="feedback-evidence"
+          *ngIf="feedback.evidence.length > 0"
+        >
+          <h4>Supporting Evidence</h4>
+
+          <div
+            class="evidence-item"
+            *ngFor="let evidence of feedback.evidence"
+          >
+            <blockquote>
+              {{ evidence.source_quote }}
+            </blockquote>
+
+            <button
+              type="button"
+              class="evidence-button"
+              (click)="viewEvidence(evidence)"
+            >
+              Highlight in original document
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Next Question -->
+      <button
+        *ngIf="evaluation"
+        type="button"
+        class="primary-button next-button"
+        (click)="nextQuestion()"
+      >
+        {{
+          currentQuestionIndex + 1 === questions.length
+            ? 'Finish Teach-Back'
+            : 'Next Question'
+        }}
+      </button>
+
+    </ng-container>
+  </div>
+
+  <!-- Completed -->
+  <div
+    class="complete-state"
+    *ngIf="isComplete"
+  >
+    <div class="complete-icon">✓</div>
+
+    <h3>Teach-Back Completed</h3>
+
+    <p>
+      You have completed the questions.
+      You can review the medical explanations above
+      whenever you need clarification.
+    </p>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="start()"
+    >
+      Try Again
+    </button>
+  </div>
+
+  <!-- Error -->
+  <p
+    class="error-message"
+    *ngIf="errorMessage"
+    role="alert"
+  >
+    {{ errorMessage }}
+  </p>
+
+</section>

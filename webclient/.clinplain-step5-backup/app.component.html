@@ -1,0 +1,155 @@
+<div class="app-shell" [attr.lang]="languageService.currentLanguage">
+
+  <!-- Top Navigation -->
+  <header class="topbar">
+    <div class="topbar-inner">
+
+      <div class="brand">
+        <img src="assets/logo.png" alt="ClinPlain" class="brand-logo" />
+      </div>
+
+      <div class="topbar-actions">
+        <div class="topbar-label">
+          {{ languageService.translate('app.subtitle') }}
+        </div>
+
+        <div class="ui-language-switch" role="group"
+          [attr.aria-label]="languageService.translate('language.interface')">
+          <button type="button" class="language-button"
+            [class.is-active]="languageService.currentLanguage === 'en'"
+            [attr.aria-pressed]="languageService.currentLanguage === 'en'"
+            (click)="setUiLanguage('en')">EN</button>
+          <button type="button" class="language-button"
+            [class.is-active]="languageService.currentLanguage === 'ja'"
+            [attr.aria-pressed]="languageService.currentLanguage === 'ja'"
+            (click)="setUiLanguage('ja')">日本語</button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+
+      <div class="welcome-content">
+        <span class="eyebrow">
+          {{ languageService.translate('welcome.eyebrow') }}
+        </span>
+
+        <h1>
+          {{ languageService.translate('welcome.heading') }}
+          <span>{{ languageService.translate('welcome.headingAccent') }}</span>
+        </h1>
+
+        <p class="welcome-description">
+          {{ languageService.translate('welcome.description') }}
+        </p>
+
+        <div class="feature-points">
+          <span>{{ languageService.translate('welcome.featureAnalysis') }}</span>
+          <span>{{ languageService.translate('welcome.featureEvidence') }}</span>
+          <span>{{ languageService.translate('welcome.featureTeachback') }}</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Document Upload -->
+    <section class="upload-section">
+
+      <app-document-upload (analysisCompleted)="onAnalysisCompleted($event)"></app-document-upload>
+
+    </section>
+
+    <!-- Analysis Results -->
+    <section class="results-section" *ngIf="analysisResult as result">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="eyebrow">
+            YOUR ANALYSIS
+          </span>
+
+          <h2>
+            Explore your document
+          </h2>
+
+          <p>
+            Select a medical fact to view its
+            original evidence.
+          </p>
+        </div>
+
+        <span class="results-tag">
+          {{ result.total_pages }}
+          {{ result.total_pages === 1 ? 'page' : 'pages' }}
+          analyzed
+        </span>
+
+      </div>
+
+      <!-- Viewer + Explanations -->
+      <div id="analysis-workspace" class="analysis-workspace">
+
+        <app-document-viewer [files]="uploadedFiles" [ocrPages]="result.ocr.pages"
+          [selectedSource]="selectedSource"></app-document-viewer>
+
+        <app-analysis-results [result]="result" (sourceSelected)="onSourceSelected($event)"></app-analysis-results>
+
+      </div>
+
+    </section>
+
+    <!-- Teach-Back -->
+    <section class="teachback-section" *ngIf="analysisResult as result">
+
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">
+            UNDERSTAND & LEARN
+          </span>
+
+          <h2>
+            Check your understanding
+          </h2>
+
+          <p>
+            Reflect on what you learned
+            from your medical document.
+          </p>
+        </div>
+      </div>
+
+      <app-teachback [explanation]="result.explanation"
+        (sourceSelected)="onTeachBackSourceSelected($event)"></app-teachback>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+
+    <div class="footer-inner">
+
+      <span class="footer-brand">
+        ClinPlain
+      </span>
+
+      <span>
+        {{ languageService.translate('footer.description') }}
+      </span>
+
+      <span>
+        © 2026 ClinPlain
+      </span>
+
+    </div>
+
+  </footer>
+
+</div>

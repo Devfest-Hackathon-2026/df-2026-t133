@@ -11,6 +11,7 @@ import {
   OCRSource,
   OCRPoint
 } from '../../app.service';
+import { LanguageService } from '../../services/language.service';
 
 
 interface DocumentPreview {
@@ -34,6 +35,8 @@ interface HighlightStyle {
 })
 export class DocumentViewerComponent
   implements OnChanges, OnDestroy {
+
+  constructor(public readonly i18n: LanguageService) { }
 
   @Input() files: File[] = [];
   @Input() ocrPages: OCRPage[] = [];

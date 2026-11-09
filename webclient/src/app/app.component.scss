@@ -808,3 +808,80 @@ app-teachback {
     height: 54px;
   }
 }
+
+/* =========================================================
+   12. INTERFACE LANGUAGE SWITCH (EN / JA)
+   ========================================================= */
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  min-width: 0;
+}
+
+.ui-language-switch {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid #dfe7f1;
+  border-radius: 999px;
+  background: #f5f8fc;
+}
+
+.language-button {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #536477;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.4;
+  padding: 7px 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &:hover:not(.is-active) {
+    background: #e6eefb;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1a73e8;
+    outline-offset: 2px;
+  }
+
+  &.is-active {
+    background: #1a73e8;
+    color: #ffffff;
+    box-shadow: 0 1px 4px rgba(26, 115, 232, 0.2);
+  }
+}
+
+@media (max-width: 700px) {
+  .topbar-actions {
+    gap: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .topbar-inner {
+    gap: 8px;
+    padding: 12px 10px;
+  }
+
+  .brand-logo {
+    width: 145px;
+    height: 45px;
+  }
+
+  .language-button {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+}
